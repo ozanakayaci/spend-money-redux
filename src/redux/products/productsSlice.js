@@ -5,49 +5,49 @@ export const productsSlice = createSlice({
   initialState: {
     products: [
       {
-        id: "1",
+        id: 1,
         photo: "https://neal.fun/spend/images/big-mac.jpg",
         title: "Big Mac",
         count: 0,
         price: 2,
       },
       {
-        id: "2",
+        id: 2,
         photo: "https://neal.fun/spend/images/flip-flops.jpg",
         title: "Flip Flop",
         count: 0,
         price: 3,
       },
       {
-        id: "3",
+        id: 3,
         photo: "https://neal.fun/spend/images/coca-cola-pack.jpg",
         title: "Coca-Cola Pack",
         count: 0,
         price: 5,
       },
       {
-        id: "4",
+        id: 4,
         photo: "https://neal.fun/spend/images/movie-ticket.jpg",
         title: "Movie Ticket",
         count: 0,
         price: 12,
       },
       {
-        id: "5",
+        id: 5,
         photo: "https://neal.fun/spend/images/book.jpg",
         title: "Book",
         count: 0,
         price: 15,
       },
       {
-        id: "6",
+        id: 6,
         photo: "https://neal.fun/spend/images/lobster-dinner.jpg",
         title: "Lobster Dinner",
         count: 0,
         price: 45,
       },
       {
-        id: "7",
+        id: 7,
         photo: "https://neal.fun/spend/images/video-game.jpg",
         title: "Video Game",
         count: 0,
@@ -328,17 +328,32 @@ export const productsSlice = createSlice({
         state.products.filter((item) =>
           item.id === action.payload.id ? (item.count += 1) : false
         );
-        state.totalMoney -= action.payload.price;
       }
     },
     removeBasket: (state, action) => {
       state.products.filter((item) =>
         item.id === action.payload.id ? (item.count -= 1) : false
       );
-      state.totalMoney += action.payload.price;
+    },
+    updateBasket: (state, action) => {
+      state.products.filter((item) =>
+        item.id == action.payload[0].id
+          ? (item.count = Number(action.payload[1]))
+          : false
+      );
+    },
+    totalMoneyCalculate: (state, action) => {
+      state.totalMoney =
+        100000000000 -
+        Object.keys(state.products).reduce(
+          (prev, key) =>
+            (prev += state.products[key].count * state.products[key].price),
+          0
+        );
     },
   },
 });
 
-export const { addBasket, removeBasket } = productsSlice.actions;
+export const { addBasket, removeBasket, updateBasket, totalMoneyCalculate } =
+  productsSlice.actions;
 export default productsSlice.reducer;

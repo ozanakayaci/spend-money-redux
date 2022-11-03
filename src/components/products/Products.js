@@ -2,7 +2,12 @@ import { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { addBasket, removeBasket } from "../../redux/products/productsSlice";
+import {
+  addBasket,
+  removeBasket,
+  updateBasket,
+  totalMoneyCalculate,
+} from "../../redux/products/productsSlice";
 
 import {
   Box,
@@ -19,8 +24,12 @@ function Products() {
 
   const products = useSelector((state) => state.products.products);
 
+  let handleChange = (item, e) => {
+    dispatch(updateBasket([item, e.target.value]));
+  };
+
   useEffect(() => {
-    console.log(products);
+    dispatch(totalMoneyCalculate());
   }, [products]);
 
   return (
@@ -66,7 +75,9 @@ function Products() {
                     <Button
                       bg="red.400"
                       disabled={item.count === 0}
-                      onClick={() => dispatch(removeBasket(item))}
+                      onClick={() => {
+                        dispatch(removeBasket(item));
+                      }}
                     >
                       Sell
                     </Button>
@@ -74,13 +85,17 @@ function Products() {
                       mx="10px"
                       type="number"
                       maxW="120px"
-                      readOnly
                       textAlign="center"
+                      onChange={(e) => {
+                        return handleChange(item, e);
+                      }}
                       value={item.count}
                     />
                     <Button
                       bg="green.400"
-                      onClick={() => dispatch(addBasket(item))}
+                      onClick={() => {
+                        dispatch(addBasket(item));
+                      }}
                     >
                       Buy
                     </Button>
